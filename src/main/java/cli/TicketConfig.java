@@ -1,5 +1,11 @@
 package cli;
 
+import com.google.gson.Gson;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class TicketConfig {
     private int totalTickets;
     private int ticketReleaseRate;
@@ -34,13 +40,57 @@ public class TicketConfig {
         }
     }
     public void setTicketReleaseRate(int ticketReleaseRate) {
+        if (totalTickets < 0 ) {
+            System.out.println("Invalid  ticket Release Rate");
+        } else if (ticketReleaseRate > totalTickets ) {
+            System.out.println("Invalid ticket release rate(Release rate can not exceed the total ticket)");
+        } else {
         this.ticketReleaseRate = ticketReleaseRate;
+            System.out.println("Ticket Release Rate set to : " + totalTickets);
+        }
     }
     public void setCustomerRetrievalRate(int customerRetrievalRate) {
+        if (totalTickets < 0 ) {
+            System.out.println("Invalid Retrieval Rate");
+        } else if (customerRetrievalRate > totalTickets ) {
+            System.out.println("Rate can not exceed the total ticket");
+        } else {
         this.customerRetrievalRate = customerRetrievalRate;
+            System.out.println("Customer ticket retrieval rate set to : " + totalTickets);
+        }
+
     }
     public void setMaxTicketsCapacity(int maxTicketsCapacity) {
+        if (totalTickets < 0) {
+            System.out.println("Invalid max Tickets Capacity");
+        } else if (maxTicketsCapacity > totalTickets ) {
+            System.out.println("Max Tickets Capacity can not exceed the total ticket");
+        } else {
         this.maxTicketsCapacity = maxTicketsCapacity;
+            System.out.println("Set max ticket capacity to : " + totalTickets);
+        }
     }
+
+public void saveToFile(String filename) {
+    Gson gson = new Gson();
+    try (FileWriter fileWriter = new FileWriter(filename);){
+        gson.toJson(this, fileWriter);
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+public static TicketConfig loadFromFile(String filename) {
+    Gson gson = new Gson();
+    try (FileReader fileReader = new FileReader(filename);){
+        return gson.fromJson(fileReader, TicketConfig.class);
+    }catch (IOException e) {
+        System.out.println("Error while Reading from file");
+    }
+    return null;
+}
+
+
 
 }
