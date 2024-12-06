@@ -60,6 +60,5 @@ public class TicketPool {
         return ticket +"Ticket added to the pool by : "+vendor;
     }
     public void buyTicket(int ticket) {
-
     }
 }
